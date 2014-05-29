@@ -29,16 +29,6 @@
   #}
 
   {% snippet 'package/snippets/edit-bbox.html', prefix='bounding_box', data=data, errors=errors %} 
-
-  {{ 
-    form.input('foo.0.baz', 
-        label=_('Foo/Baz'), 
-        id='field-foo.0.baz', 
-        placeholder=_('a wonderfull thing'), 
-        value=data.get('foo.0.baz'), 
-        error=errors.get('foo.0.baz'), 
-        classes=['control-medium']) 
-  }}
  
   {#
   {% set music_genres = data.get('foo', [None]) %}
@@ -50,6 +40,6 @@
   }}
   #}
   
-  {#{{ super() }}#}
+  {{ super() }}
 
 {% endblock %}

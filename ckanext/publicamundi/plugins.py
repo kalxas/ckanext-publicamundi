@@ -158,6 +158,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         for k in ['sblat', 'nblat']:
             schema['bounding_box.' + k] = [
                 toolkit.get_validator('ignore_missing'),
+                toolkit.get_validator('ignore_empty'),
                 publicamundi_converters.to_float_number, 
                 publicamundi_validators.is_latitude, 
                 toolkit.get_converter('convert_to_extras'), 
@@ -165,6 +166,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         for k in ['eblng', 'wblng']:
             schema['bounding_box.' + k] = [
                 toolkit.get_validator('ignore_missing'),
+                toolkit.get_validator('ignore_empty'),
                 publicamundi_converters.to_float_number, 
                 publicamundi_validators.is_longitude, 
                 toolkit.get_converter('convert_to_extras'), 
@@ -179,6 +181,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         '''
 
         schema['foo.0.baz'] = [
+            toolkit.get_validator('ignore_missing'),
             toolkit.get_converter('convert_to_extras')
         ]
 
