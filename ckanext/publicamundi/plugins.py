@@ -384,20 +384,24 @@ class PackageController(p.SingletonPlugin):
     def _create_or_update_csw_record(self, session, pkg_dict):
         ''' Sync dataset fields to CswRecord fields '''
         #raise Exception('Break')
+        if pkg_dict.get('state') != 'active':
+            log1.info('Skipping sync on CSW for non-active package %d', pkg_dict['id'])
+            return
         #from geoalchemy import WKTSpatialElement
         from ckanext.publicamundi.lib.util import geojson_to_wkt
         # Populate record fields
         record = session.query(publicamundi_model.CswRecord).get(pkg_dict['id'])
+        rendered_xml = p.toolkit.render_snippet('metadata/package2iso.xml', data={ 'pkg_dict': pkg_dict })
         if not record:
             log1.info('Creating CswRecord %s', pkg_dict.get('id'))
             # Render xml from template
-            rendered_xml = p.toolkit.render_snippet('metadata/package2iso.xml', dict=pkg_dict)
             record = publicamundi_model.CswRecord(pkg_dict.get('id'), rendered_xml)
             session.add(record)
         else:
             log1.info('Updating CswRecord %s', pkg_dict.get('id'))
         extras = { item['key']: item['value'] for item in pkg_dict.get('extras', []) }
         record.title = pkg_dict.get('title')
+        record.xml = rendered_xml
         if pkg_dict.get('description') is not None:
             record.abstract = pkg_dict.get('description')
         if pkg_dict.get('metadata_created') is not None:

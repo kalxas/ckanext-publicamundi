@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gmd:MD_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.isotc211.org/2005/gmd http://www.isotc211.org/2005/gmd/gmd.xsd">
   <gmd:fileIdentifier>
-    <gco:CharacterString>{{ dict['id'] }}</gco:CharacterString>
+    <gco:CharacterString>{{ pkg_dict['id'] }}</gco:CharacterString>
   </gmd:fileIdentifier>
   <gmd:hierarchyLevel>
     <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset" codeSpace="ISOTC211/19115">dataset</gmd:MD_ScopeCode>
   </gmd:hierarchyLevel>
   <gmd:contact>
     <gmd:CI_ResponsibleParty>
-      {% if dict['maintainer'] and dict['maintainer'] is not none -%}
+      {% if pkg_dict['maintainer'] and pkg_dict['maintainer'] is not none -%}
       <gmd:individualName>
-        <gco:CharacterString>{{ dict['maintainer'] }}</gco:CharacterString>
+        <gco:CharacterString>{{ pkg_dict['maintainer'] }}</gco:CharacterString>
       </gmd:individualName>
       {% endif -%}
-      {% if dict['maintainer_email'] and dict['maintainer_email'] is not none -%}
+      {% if pkg_dict['maintainer_email'] and pkg_dict['maintainer_email'] is not none -%}
       <gmd:contactInfo>
         <gmd:CI_Contact>
           <gmd:address>
             <gmd:CI_Address>
               <gmd:electronicMailAddress>
-                <gco:CharacterString>{{ dict['maintainer_email'] }}</gco:CharacterString>
+                <gco:CharacterString>{{ pkg_dict['maintainer_email'] }}</gco:CharacterString>
               </gmd:electronicMailAddress>
             </gmd:CI_Address>
           </gmd:address>
@@ -32,7 +32,7 @@
     </gmd:CI_ResponsibleParty>
   </gmd:contact>
   <gmd:dateStamp>
-    <gco:DateTime>{{ dict['metadata_created'] }}</gco:DateTime>
+    <gco:DateTime>{{ pkg_dict['metadata_created'] }}</gco:DateTime>
   </gmd:dateStamp>
   <gmd:metadataStandardName>
     <gco:CharacterString>ISO 19115:2003 - Geographic information - Metadata</gco:CharacterString>
@@ -45,15 +45,15 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>{{ dict['title'] }}</gco:CharacterString>
+            <gco:CharacterString>{{ pkg_dict['title'] }}</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
               <gmd:date>
-                {% if dict['metadata_modified'] and dict['metadata_modified']|length > 11 -%}
-                <gco:DateTime>{{ dict['metadata_modified'] }}</gco:DateTime>
+                {% if pkg_dict['metadata_modified'] and pkg_dict['metadata_modified']|length > 11 -%}
+                <gco:DateTime>{{ pkg_dict['metadata_modified'] }}</gco:DateTime>
                 {% else -%}
-                <gco:Date>{{ dict['metadata_modified'] }}</gco:Date>
+                <gco:Date>{{ pkg_dict['metadata_modified'] }}</gco:Date>
                 {% endif -%}
               </gmd:date>
               <gmd:dateType>
@@ -64,22 +64,22 @@
         </gmd:CI_Citation>
       </gmd:citation>
       <gmd:abstract>
-        <gco:CharacterString>{{ dict['description']|e }}</gco:CharacterString>
+        <gco:CharacterString>{{ pkg_dict['description']|e }}</gco:CharacterString>
       </gmd:abstract>
       <gmd:pointOfContact>
         <gmd:CI_ResponsibleParty>
-          {% if dict['author'] and dict['author'] is not none -%}
+          {% if pkg_dict['author'] and pkg_dict['author'] is not none -%}
           <gmd:individualName>
-            <gco:CharacterString>{{ dict['author'] }}</gco:CharacterString>
+            <gco:CharacterString>{{ pkg_dict['author'] }}</gco:CharacterString>
           </gmd:individualName>
           {% endif -%}
-          {% if dict['author_email'] and dict['author_email'] is not none -%}
+          {% if pkg_dict['author_email'] and pkg_dict['author_email'] is not none -%}
           <gmd:contactInfo>
             <gmd:CI_Contact>
               <gmd:address>
                 <gmd:CI_Address>
                   <gmd:electronicMailAddress>
-                    <gco:CharacterString>{{ dict['author_email'] }}</gco:CharacterString>
+                    <gco:CharacterString>{{ pkg_dict['author_email'] }}</gco:CharacterString>
                   </gmd:electronicMailAddress>
                 </gmd:CI_Address>
               </gmd:address>
@@ -91,10 +91,10 @@
           </gmd:role>
         </gmd:CI_ResponsibleParty>
       </gmd:pointOfContact>
-      {% if dict['tags'] != [] -%}
+      {% if pkg_dict['tags'] != [] -%}
       <gmd:descriptiveKeywords>
         <gmd:MD_Keywords>
-          {% for tag in dict['tags'] -%}
+          {% for tag in pkg_dict['tags'] -%}
           <gmd:keyword>
             <gco:CharacterString>{{ tag['display_name'] }}</gco:CharacterString>
           </gmd:keyword>
@@ -117,29 +117,29 @@
           </gmd:useLimitation>
         </gmd:MD_Constraints>
       </gmd:resourceConstraints>
-      {% if dict['extras']['language'] and dict['extras']['language'] is not none -%}
+      {% if pkg_dict['extras']['language'] and pkg_dict['extras']['language'] is not none -%}
       <gmd:language>
-        <gco:CharacterString>{{ dict['extras']['language'] }}</gco:CharacterString>
+        <gco:CharacterString>{{ pkg_dict['extras']['language'] }}</gco:CharacterString>
       </gmd:language>
       {% else -%}
       <gmd:language gco:nilReason="missing"/>
       {% endif -%}
-      {% if dict['extras']['spatial'] and dict['extras']['spatial'] != {} -%}
+      {% if pkg_dict['extras']['spatial'] and pkg_dict['extras']['spatial'] != {} -%}
       <gmd:extent>
         <gmd:EX_Extent>
           <gmd:geographicElement>
             <gmd:EX_GeographicBoundingBox>
               <gmd:westBoundLongitude>
-                <gco:Decimal>{{ dict['extras']['bounding_box.wblng'] }}</gco:Decimal>
+                <gco:Decimal>{{ pkg_dict['extras']['bounding_box.wblng'] }}</gco:Decimal>
               </gmd:westBoundLongitude>
               <gmd:eastBoundLongitude>
-                <gco:Decimal>{{ dict['extras']['bounding_box.eblng'] }}</gco:Decimal>
+                <gco:Decimal>{{ pkg_dict['extras']['bounding_box.eblng'] }}</gco:Decimal>
               </gmd:eastBoundLongitude>
               <gmd:southBoundLatitude>
-                <gco:Decimal>{{ dict['extras']['bounding_box.sblat'] }}</gco:Decimal>
+                <gco:Decimal>{{ pkg_dict['extras']['bounding_box.sblat'] }}</gco:Decimal>
               </gmd:southBoundLatitude>
               <gmd:northBoundLatitude>
-                <gco:Decimal>{{ dict['extras']['bounding_box.nblat'] }}</gco:Decimal>
+                <gco:Decimal>{{ pkg_dict['extras']['bounding_box.nblat'] }}</gco:Decimal>
               </gmd:northBoundLatitude>
             </gmd:EX_GeographicBoundingBox>
           </gmd:geographicElement>
