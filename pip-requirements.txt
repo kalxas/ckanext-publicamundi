@@ -4,6 +4,8 @@ shapely
 GeoAlchemy>=0.6
 requests==1.1.0
 -e git+https://github.com/ckan/ckanext-spatial.git#egg=ckanext_spatial
+-e git+https://github.com/geopython/pycsw.git#egg=pycsw
+-e git+https://github.com/geopython/OWSLib.git#egg=OWSLib
 zope.interface==4.0.1
 zope.schema==4.4
 zope.component==4.1
