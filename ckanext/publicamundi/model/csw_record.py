@@ -98,9 +98,9 @@ class CswRecord(Base):
 
     #uniq_name = UniqueConstraint('name')
 
-    def __init__(self, id, insert_date, xml):
+    def __init__(self, id, xml):
         self.identifier = id
-        self.insert_date = insert_date or datetime.now();
+        self.insert_date = datetime.now();
         self.xml = xml
         self.anytext = util.get_anytext(xml)
 

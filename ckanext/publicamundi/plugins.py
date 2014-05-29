@@ -376,20 +376,33 @@ class PackageController(p.SingletonPlugin):
     def _create_or_update_csw_record(self, session, pkg_dict):
         ''' Sync dataset fields to CswRecord fields '''
         #raise Exception('Break')
-        from geoalchemy import WKTSpatialElement
+        #from geoalchemy import WKTSpatialElement
         from ckanext.publicamundi.lib.util import geojson_to_wkt
         # Populate record fields
         record = session.query(publicamundi_model.CswRecord).get(pkg_dict['id'])
         if not record:
             log1.info('Creating CswRecord %s', pkg_dict.get('id'))
-            record = publicamundi_model.CswRecord(pkg_dict.get('id'), name=pkg_dict.get('name'))
+            # Render xml from template
+            rendered_xml = p.toolkit.render_snippet('metadata/package2iso.xml', dict=pkg_dict)
+            record = publicamundi_model.CswRecord(pkg_dict.get('id'), rendered_xml)
             session.add(record)
         else:
             log1.info('Updating CswRecord %s', pkg_dict.get('id'))
         extras = { item['key']: item['value'] for item in pkg_dict.get('extras', []) }
         record.title = pkg_dict.get('title')
+        if pkg_dict.get('description') is not None:
+            record.abstract = pkg_dict.get('description')
+        if pkg_dict.get('metadata_created') is not None:
+            record.date_creation = pkg_dict.get('metadata_created')
+        if pkg_dict.get('metadata_modified') is not None:
+            record.date_revision = pkg_dict.get('metadata_modified')
+
+        if 'temporal_extent.start' in extras and 'temporal_extent.end' in extras:
+            record.time_begin = extras.get('temporal_extent.start')
+            record.time_end = extras.get('temporal_extent.end')
+
         if 'spatial' in extras:
-            record.geom = WKTSpatialElement(geojson_to_wkt(extras.get('spatial')))
+            record.wkt_geometry = geojson_to_wkt(extras.get('spatial'))
         # Persist object
         session.commit()
         log1.info('Saved CswRecord %s (%s)', record.id, record.name)
