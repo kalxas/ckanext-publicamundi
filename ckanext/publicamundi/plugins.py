@@ -153,31 +153,20 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         log1.info('_modify_package_schema(): Building schema ...')
 
         import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
+        import ckanext.publicamundi.lib.metadata.converters as publicamundi_converters
+        
+        for k in ['sblat', 'nblat', 'eblng', 'wblng']:
+            schema['bounding_box.' + k] = [
+                toolkit.get_validator('ignore_missing'),
+                publicamundi_converters.to_float_number, 
+                toolkit.get_converter('convert_to_extras'), 
+            ]
         
         schema['dataset_type'] = [
             toolkit.get_validator('default')('ckan'),
             toolkit.get_converter('convert_to_extras'),
             publicamundi_validators.is_dataset_type,
         ];
- 
-        # Add field-based validation processors
-
-        field_name = 'baz'
-        field = publicamundi_metadata.IInspireMetadata.get(field_name)
-        if field.default:
-            x1 = toolkit.get_validator('default')(field.default)
-        elif field.defaultFactory:
-            x1 = toolkit.get_validator('default')(field.defaultFactory())
-        elif not field.required:
-            x1 = toolkit.get_validator('ignore_missing')
-        else:
-            x1 = toolkit.get_validator('not_empty')
-
-        x2 = publicamundi_validators.get_field_validator(field)
-        x3 = toolkit.get_converter('convert_to_extras')
-        
-        schema[field_name] = [x1, x2, x3]
-
 
         schema['foo.0.baz'] = [
             toolkit.get_converter('convert_to_extras')
