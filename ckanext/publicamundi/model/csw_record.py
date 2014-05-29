@@ -102,7 +102,8 @@ class CswRecord(Base):
         self.identifier = id
         self.insert_date = datetime.now();
         self.xml = xml
-        self.anytext = util.get_anytext(xml)
+        encoded_xml = xml.encode('utf-8')
+        self.anytext = util.get_anytext(encoded_xml)
 
     def __unicode__(self):
         return "<CswRecord \"%s\">" % (self.schema)
