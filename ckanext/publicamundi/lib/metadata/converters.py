@@ -12,6 +12,7 @@ _t = toolkit._
 log1 = logging.getLogger(__name__)
 
 def to_float_number(value, context):
+    raise Exception('to_float_number')
     try:
         value = float(value)
     except: 

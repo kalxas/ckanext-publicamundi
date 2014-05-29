@@ -59,33 +59,34 @@ def get_field_validator(field):
 ## Todo: Replace by zope.schema-based functionality
 
 def _validate_bbox(data):
-    wblng = data[('bounding_box.wblng',)]
-    eblng = data[('bounding_box.eblng',)]
-    if wblng > eblng:
+    wblng = data.get(('bounding_box.wblng',))
+    eblng = data.get(('bounding_box.eblng',))
+    if wblng and eblng and (wblng > eblng):
         raise Invalid(_t('Invalid range for West-East longitude'))
-    nblat = data[('bounding_box.nblat',)]
-    sblat = data[('bounding_box.sblat',)]
-    if sblat > nblat:
+    nblat = data.get(('bounding_box.nblat',))
+    sblat = data.get(('bounding_box.sblat',))
+    if nblat and sblat and (sblat > nblat):
         raise Invalid(_t('Invalid range for South-North latitude'))
     
 
 def _convert_bbox_to_spatial(data):
-    x1 = x4 = data[('bounding_box.wblng',)]
-    x2 = x3 = data[('bounding_box.eblng',)]
-    y1 = y2 = data[('bounding_box.sblat',)]
-    y3 = y4 = data[('bounding_box.nblat',)]
-    data[('extras',)].append({
-        'key': 'spatial',
-        'value': json.dumps({ 
-            'type': 'Polygon',
-            'coordinates': [
-                [
-                    [x1, y1], [x2, y2], [x3, y3], [x4, y4],
-                    [x1, y1],
+    x1 = x4 = data.get(('bounding_box.wblng',))
+    x2 = x3 = data.get(('bounding_box.eblng',))
+    y1 = y2 = data.get(('bounding_box.sblat',))
+    y3 = y4 = data.get(('bounding_box.nblat',))
+    if x1 and x2 and y1 and y3:
+        data[('extras',)].append({
+            'key': 'spatial',
+            'value': json.dumps({ 
+                'type': 'Polygon',
+                'coordinates': [
+                    [
+                        [x1, y1], [x2, y2], [x3, y3], [x4, y4],
+                        [x1, y1],
+                    ]
                 ]
-            ]
-        }),
-    })
+            }),
+        })
 
 def is_latitude(value, context):
     if value < -90 or value > 90:
@@ -96,6 +97,5 @@ def is_longitude(value, context):
     if value < -180 or value > 180:
         raise Invalid(_t('This number cannot represent a longitude'))
     return value
-
 
 
