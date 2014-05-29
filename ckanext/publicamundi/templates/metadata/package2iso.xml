@@ -136,10 +136,10 @@
                 <gco:Decimal>{{ dict['extras']['bounding_box.eblng'] }}</gco:Decimal>
               </gmd:eastBoundLongitude>
               <gmd:southBoundLatitude>
-                <gco:Decimal>{{ dict['extras']['bounding_box.sblng'] }}</gco:Decimal>
+                <gco:Decimal>{{ dict['extras']['bounding_box.sblat'] }}</gco:Decimal>
               </gmd:southBoundLatitude>
               <gmd:northBoundLatitude>
-                <gco:Decimal>{{ dict['extras']['bounding_box.nblng'] }}</gco:Decimal>
+                <gco:Decimal>{{ dict['extras']['bounding_box.nblat'] }}</gco:Decimal>
               </gmd:northBoundLatitude>
             </gmd:EX_GeographicBoundingBox>
           </gmd:geographicElement>
