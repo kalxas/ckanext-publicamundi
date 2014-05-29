@@ -28,8 +28,14 @@
   {% endif %}
   #}
 
-  {% snippet 'package/snippets/edit-bbox.html', prefix='bounding_box', data=data, errors=errors %} 
+  
+  {{ super() }}
+
+  
+  {% snippet 'package/snippets/edit-bounding_box.html', prefix='bounding_box', data=data, errors=errors %} 
  
+  {% snippet 'package/snippets/edit-temporal_extent.html', prefix='temporal_extent', data=data, errors=errors %} 
+  
   {#
   {% set music_genres = data.get('foo', [None]) %}
   {{ form.select('foo', 
@@ -40,6 +46,4 @@
   }}
   #}
   
-  {{ super() }}
-
 {% endblock %}

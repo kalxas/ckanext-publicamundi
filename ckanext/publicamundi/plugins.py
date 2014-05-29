@@ -155,6 +155,14 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
         import ckanext.publicamundi.lib.metadata.converters as publicamundi_converters
         
+        '''
+        schema['dataset_type'] = [
+            toolkit.get_validator('default')('ckan'),
+            toolkit.get_converter('convert_to_extras'),
+            publicamundi_validators.is_dataset_type,
+        ]
+        '''
+       
         for k in ['sblat', 'nblat']:
             schema['bounding_box.' + k] = [
                 toolkit.get_validator('ignore_missing'),
@@ -172,19 +180,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
                 toolkit.get_converter('convert_to_extras'), 
             ]
        
-        '''
-        schema['dataset_type'] = [
-            toolkit.get_validator('default')('ckan'),
-            toolkit.get_converter('convert_to_extras'),
-            publicamundi_validators.is_dataset_type,
-        ]
-        '''
-
-        schema['foo.0.baz'] = [
-            toolkit.get_validator('ignore_missing'),
-            toolkit.get_converter('convert_to_extras')
-        ]
-
+        for k in ['start', 'end']:
+            schema['temporal_extent.' +k] = [
+                toolkit.get_validator('ignore_missing'),
+                toolkit.get_validator('ignore_empty'),
+                publicamundi_converters.to_iso_date, 
+                toolkit.get_converter('convert_to_extras')
+            ]
 
         # Add before/after validation processors
 
@@ -230,6 +232,12 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         for k in ['sblat', 'nblat', 'wblng', 'eblng']:
             schema['bounding_box.' +k] = [
+                toolkit.get_converter('convert_from_extras'),
+                toolkit.get_validator('ignore_missing') 
+            ]
+
+        for k in ['start', 'end']:
+            schema['temporal_extent.' +k] = [
                 toolkit.get_converter('convert_from_extras'),
                 toolkit.get_validator('ignore_missing') 
             ]
@@ -391,7 +399,7 @@ class PackageController(p.SingletonPlugin):
         if 'spatial' in extras:
             record.geom = WKTSpatialElement(geojson_to_wkt(extras.get('spatial')))
         # Persist object
-        session.commit()
+        session.commit() 
         log1.info('Saved CswRecord %s (%s)', record.id, record.name)
         return
 

@@ -2,6 +2,7 @@ import logging
 import zope.interface
 import zope.schema
 import json
+import datetime
 
 import ckan.plugins.toolkit as toolkit
 from ckan.lib.navl.dictization_functions import missing, StopOnError, Invalid
@@ -35,6 +36,7 @@ def dataset_validate(key, data, errors, context):
     assert key[0] == '__after', 'This validator can only be invoked in the __after stage'
     log1.debug('Validating dataset for editing')
     _validate_bbox(data)
+    _validate_temporal_extent(data)
     #raise Exception('Break (validate)')
     pass
 
@@ -67,7 +69,7 @@ def _validate_bbox(data):
     sblat = data.get(('bounding_box.sblat',))
     if nblat and sblat and (sblat > nblat):
         raise Invalid(_t('Invalid range for South-North latitude'))
-    
+    return
 
 def _convert_bbox_to_spatial(data):
     x1 = x4 = data.get(('bounding_box.wblng',))
@@ -87,6 +89,14 @@ def _convert_bbox_to_spatial(data):
                 ]
             }),
         })
+    return
+
+def _validate_temporal_extent(data):
+    start_date = data.get(('temporal_extent.start',))
+    end_date = data.get(('temporal_extent.end',))
+    if start_date and end_date and (start_date > end_date):
+        raise Invalid(_t('Invalid range for start-end date'))
+    return
 
 def is_latitude(value, context):
     if value < -90 or value > 90:
@@ -97,5 +107,4 @@ def is_longitude(value, context):
     if value < -180 or value > 180:
         raise Invalid(_t('This number cannot represent a longitude'))
     return value
-
 
