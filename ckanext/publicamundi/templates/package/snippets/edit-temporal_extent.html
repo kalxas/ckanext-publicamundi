@@ -23,6 +23,7 @@
           value="{{ data.get(prefix ~ '.' ~ k, '') }}" 
           name="{{ prefix ~ '.' ~ k }}" 
           id="field-{{ prefix ~ '.' ~ k }}"
+          data-module="datepicker"
        >
        {#{% if loop.first %}<span>&nbsp;&nbsp;To&nbsp;&nbsp;</span>{% endif %}#}
        {% endfor %}
@@ -30,3 +31,4 @@
     </div>
 </div>
 
+{% resource 'ckanext-publicamundi/datepicker' %}
