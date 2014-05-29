@@ -391,7 +391,7 @@ class PackageController(p.SingletonPlugin):
         from ckanext.publicamundi.lib.util import geojson_to_wkt
         # Populate record fields
         record = session.query(publicamundi_model.CswRecord).get(pkg_dict['id'])
-        rendered_xml = p.toolkit.render_snippet('metadata/package2iso.xml', data={ 'pkg_dict': pkg_dict })
+        rendered_xml = p.toolkit.render('metadata/package2iso.xml', extra_vars={ 'pkg_dict': pkg_dict })
         if not record:
             log1.info('Creating CswRecord %s', pkg_dict.get('id'))
             # Render xml from template
