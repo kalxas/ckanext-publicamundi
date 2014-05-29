@@ -13,8 +13,8 @@
 
 
 {% block package_metadata_fields %}
- 
   
+  {#
   {% if data.get('state') == 'draft' %}
   {{ form.select('dataset_type', 
         label = _('Dataset Type'), 
@@ -26,18 +26,12 @@
   {{ form.hidden('dataset_type', data.get('dataset_type')) }}
   <div><dt>Dataset Type:</dt><dd>{{ data.get('dataset_type') }}</dd></div>
   {% endif %}
-  
-  
-  {{ form.input('baz', 
-        label=_('Baz'), 
-        id='field-baz', 
-        placeholder=_('a wonderfull thing'), 
-        value=data.get('baz'), 
-        error=errors.get('baz'), 
-        classes=['control-medium']) 
-  }}
-   
-  {{ form.input('foo.0.baz', 
+  #}
+
+  {% snippet 'package/snippets/edit-bbox.html', prefix='bounding_box', data=data, errors=errors %} 
+
+  {{ 
+    form.input('foo.0.baz', 
         label=_('Foo/Baz'), 
         id='field-foo.0.baz', 
         placeholder=_('a wonderfull thing'), 
@@ -46,9 +40,6 @@
         classes=['control-medium']) 
   }}
  
-
-
-
   {#
   {% set music_genres = data.get('foo', [None]) %}
   {{ form.select('foo', 
@@ -59,6 +50,6 @@
   }}
   #}
   
-  {{ super() }}
+  {#{{ super() }}#}
 
 {% endblock %}

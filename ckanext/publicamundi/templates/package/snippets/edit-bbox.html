@@ -1,0 +1,50 @@
+{% import "macros/form.html" as form %}
+
+{% set fields = {
+        'nblat': { 
+            'placeholder': _('North Lat'),
+            'title':  _('North Bound Latitude') },
+        'sblat': { 
+            'placeholder': _('South Lat'),
+            'title':  _('South Bound Latitude') }, 
+        'eblng': { 
+            'placeholder': _('East Lng'),
+            'title':  _('East Bound Longitude') }, 
+        'wblng': { 
+            'placeholder': _('West Lng'),
+            'title':  _('West Bound Longitude') },} 
+%}
+
+<div class="control-group control-small">
+    <label for="field-{{ prefix }}" class="control-label">{{ _('Bounding Box') }}</label>
+    <div class="controls "> 
+    
+       {% for k in ['sblat', 'nblat'] %}
+       <input 
+          type="text" 
+          class="input-small"
+          title="{{ fields[k]['title'] }}"
+          placeholder="{{ fields[k]['placeholder'] }}" 
+          value="{{ data.get(prefix ~ '.' ~ k, '') }}" 
+          name="{{ prefix ~ '.' ~ k }}" 
+          id="field-{{ prefix ~ '.' ~ k }}"
+       >
+       {% endfor %}
+       
+       <span>&nbsp;&nbsp;&nbsp;</span>
+       
+       {% for k in ['wblng', 'eblng'] %}
+       <input 
+          type="text" 
+          class="input-small"
+          title="{{ fields[k]['title'] }}"
+          placeholder="{{ fields[k]['placeholder'] }}" 
+          value="{{ data.get(prefix ~ '.' ~ k, '') }}" 
+          name="{{ prefix ~ '.' ~ k }}" 
+          id="field-{{ prefix ~ '.' ~ k }}"
+       >
+       {% endfor %}
+
+    </div>
+</div>
+

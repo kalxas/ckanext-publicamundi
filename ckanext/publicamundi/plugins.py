@@ -155,18 +155,28 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
         import ckanext.publicamundi.lib.metadata.converters as publicamundi_converters
         
-        for k in ['sblat', 'nblat', 'eblng', 'wblng']:
+        for k in ['sblat', 'nblat']:
             schema['bounding_box.' + k] = [
                 toolkit.get_validator('ignore_missing'),
                 publicamundi_converters.to_float_number, 
+                publicamundi_validators.is_latitude, 
                 toolkit.get_converter('convert_to_extras'), 
             ]
-        
+        for k in ['eblng', 'wblng']:
+            schema['bounding_box.' + k] = [
+                toolkit.get_validator('ignore_missing'),
+                publicamundi_converters.to_float_number, 
+                publicamundi_validators.is_longitude, 
+                toolkit.get_converter('convert_to_extras'), 
+            ]
+       
+        '''
         schema['dataset_type'] = [
             toolkit.get_validator('default')('ckan'),
             toolkit.get_converter('convert_to_extras'),
             publicamundi_validators.is_dataset_type,
-        ];
+        ]
+        '''
 
         schema['foo.0.baz'] = [
             toolkit.get_converter('convert_to_extras')
@@ -213,11 +223,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
                 toolkit.get_converter('convert_from_tags')('foo'),
                 toolkit.get_validator('ignore_missing')
             ],
-            'baz': [
-                toolkit.get_converter('convert_from_extras'),
-                toolkit.get_validator('ignore_missing')
-            ],
         })
+
+        for k in ['sblat', 'nblat', 'wblng', 'eblng']:
+            schema['bounding_box.' +k] = [
+                toolkit.get_converter('convert_from_extras'),
+                toolkit.get_validator('ignore_missing') 
+            ]
 
         if not schema.get('__after'):
             schema['__after'] = []
