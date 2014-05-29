@@ -50,11 +50,11 @@
           <gmd:date>
             <gmd:CI_Date>
               <gmd:date>
-                {% if dict['metadata_modified'] and dict['metadata_modified']|length > 11 %}
+                {% if dict['metadata_modified'] and dict['metadata_modified']|length > 11 -%}
                 <gco:DateTime>{{ dict['metadata_modified'] }}</gco:DateTime>
-                {% else %}
+                {% else -%}
                 <gco:Date>{{ dict['metadata_modified'] }}</gco:Date>
-                {% endif %}
+                {% endif -%}
               </gmd:date>
               <gmd:dateType>
                 <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision" codeSpace="ISOTC211/19115">revision</gmd:CI_DateTypeCode>
@@ -98,7 +98,7 @@
           <gmd:keyword>
             <gco:CharacterString>{{ tag['display_name'] }}</gco:CharacterString>
           </gmd:keyword>
-          {% endfor %}
+          {% endfor -%}
           <gmd:type>
             <gmd:MD_KeywordTypeCode
               codeList='http://standards.iso.org/iso/19139/resources/codelist/gmxCodelists.xml'
@@ -121,10 +121,10 @@
       <gmd:language>
         <gco:CharacterString>{{ dict['extras']['language'] }}</gco:CharacterString>
       </gmd:language>
-      {% else %}
+      {% else -%}
       <gmd:language gco:nilReason="missing"/>
-      {% endif %}
-      {% if dict['extras']['spatial'] and dict['extras']['spatial'] != {} %}
+      {% endif -%}
+      {% if dict['extras']['spatial'] and dict['extras']['spatial'] != {} -%}
       <gmd:extent>
         <gmd:EX_Extent>
           <gmd:geographicElement>
@@ -145,7 +145,7 @@
           </gmd:geographicElement>
         </gmd:EX_Extent>
       </gmd:extent>
-      {% endif %}
+      {% endif -%}
     </gmd:MD_DataIdentification>
   </gmd:identificationInfo>
 </gmd:MD_Metadata>
