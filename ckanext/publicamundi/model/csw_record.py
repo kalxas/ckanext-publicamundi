@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Table, Column, Integer, String, DateTime, MetaData, ForeignKey, UniqueConstraint, Index
+from sqlalchemy import Table, Column, Integer, String, Text, DateTime, MetaData, ForeignKey, UniqueConstraint, Index
 from sqlalchemy.orm import relation, relationship, backref
 from geoalchemy import Geometry, GeometryColumn, GeometryDDL, Polygon, Point
 
