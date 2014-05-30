@@ -417,7 +417,7 @@ class PackageController(p.SingletonPlugin):
             record.wkt_geometry = geojson_to_wkt(extras.get('spatial'))
         # Persist object
         session.commit() 
-        log1.info('Saved CswRecord %s (%s)', record.id, record.name)
+        log1.info('Saved CswRecord %s', record.identifier)
         return
 
     def _delete_csw_record(self, session, pkg_dict):
